@@ -55,10 +55,21 @@ Shader "Unlit/Meditation"
                     return lerp(_Color1, _Color2, sin((_Time + 20) * _Scale) * 0.5 + 0.5);
                 }
             }
+            
+            fixed sinTime() {
+                fixed x = sin(_Time) * 0.5 + 1.5;
+                if (x < 0.2) {
+                    return 0.2;
+                } else if (x > 0.9) {
+                    return 0.9;
+                } else {
+                    return x;
+                }
+            }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                return lerp(colorMap(0), colorMap(1), smoothstep(0.1, 0.9, frac(i.uv.x)));
+                return lerp(colorMap(0), colorMap(1), smoothstep(0.1, sinTime(), frac(i.uv.x)));
             }
             ENDCG
         }
